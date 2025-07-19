@@ -168,53 +168,6 @@ Any violations may:
 
 ---
 
-## ⚙️ Local OPA + FastAPI Integration
-
-To serve this policy locally:
-
-### 1. Save Policy as `governance.rego`
-
-```rego
-package platform.governance
-
-deny[msg] {
-  input.data_access.user != input.identity
-  msg := "Unauthorized access to another user's data"
-}
-```
-
-### 2. Run OPA with FastAPI
-
-```bash
-opa run --server --addr localhost:8181 governance.rego
-```
-
-### 3. Query from FastAPI
-
-```python
-import requests
-
-def check_policy(input_data):
-    response = requests.post(
-        "http://localhost:8181/v1/data/platform/governance/deny",
-        json={"input": input_data}
-    )
-    return response.json()
-```
-
----
-
-## 🧩 Contributing to Governance
-
-| Role            | Contribution Area |
-|------------------|-------------------|
-| Developers       | Add/enforce rego policies |
-| Product Owners   | Define edge-case rules |
-| Legal/Compliance | Audit constraints |
-| Testers          | Validate enforcement |
-
----
-
 ## 📄 LICENSE
 
 MIT License. For internal use within Family Office Builder unless otherwise stated.
